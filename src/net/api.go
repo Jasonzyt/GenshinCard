@@ -4,10 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
-	"io"
 	"math/rand"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/jasonzyt/genshincard/config"
@@ -90,22 +88,6 @@ func httpGet(apiType int, region string, uid string) (*http.Response, error) {
 	}
 
 	return resp, nil
-}
-
-func readString(reader io.Reader) (string, error) {
-	buf := make([]byte, 1024)
-	var sb strings.Builder
-	for {
-		n, err := reader.Read(buf)
-		sb.Write(buf[:n])
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			return "", err
-		}
-	}
-	return sb.String(), nil
 }
 
 func QueryPlayerProfile(apiType int, region string, uid string) (*PlayerProfile, error) {
