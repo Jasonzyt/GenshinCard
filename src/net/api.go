@@ -46,7 +46,7 @@ var (
 	}
 )
 
-func httpGet(apiType int, region string, uid string) (string, error) {
+func httpGet(apiType int, region string, uid string) (*http.Response, error) {
 	query := fmt.Sprintf("role_id=%s&server=%s", uid, region)
 	url := apiUrls[apiType].PlayerIndexUrl + "?" + query
 	salt := "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs"
@@ -68,7 +68,7 @@ func httpGet(apiType int, region string, uid string) (string, error) {
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	req.Header.Set("Referer", "https://webstatic.mihoyo.com/")
@@ -83,17 +83,20 @@ func httpGet(apiType int, region string, uid string) (string, error) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("http get %s failed, status: %s", url, resp.Status)
+		return nil, fmt.Errorf("http get %s failed, status: %s", url, resp.Status)
 	}
-	defer resp.Body.Close()
 
+	return resp, nil
+}
+
+func readString(reader io.Reader) (string, error) {
 	buf := make([]byte, 1024)
 	var sb strings.Builder
 	for {
-		n, err := resp.Body.Read(buf)
+		n, err := reader.Read(buf)
 		sb.Write(buf[:n])
 		if err != nil {
 			if err == io.EOF {
@@ -102,20 +105,22 @@ func httpGet(apiType int, region string, uid string) (string, error) {
 			return "", err
 		}
 	}
-	data := sb.String()
-	// fmt.Printf("[DEBUG] http get %s, response: %s\n", url, data)
-	return data, nil
+	return sb.String(), nil
 }
 
 func QueryPlayerProfile(apiType int, region string, uid string) (*PlayerProfile, error) {
-	data, err := httpGet(apiType, region, uid)
+	resp, err := httpGet(apiType, region, uid)
 	if err != nil {
 		return nil, err
 	}
-	var profile PlayerProfile
-	err = json.Unmarshal([]byte(data), &profile)
+	defer resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	return &profile, nil
+	var deserializedResp PlayerIndexResponse
+	err = json.NewDecoder(resp.Body).Decode(&deserializedResp)
+	if err != nil || deserializedResp.ReturnCode != 0 {
+		return nil, err
+	}
+	return &deserializedResp.Data, nil
 }
