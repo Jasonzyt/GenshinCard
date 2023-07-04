@@ -13,16 +13,16 @@ const ConfigFilePath = "./config.yaml"
 
 type Config struct {
 	CookieSecret string `default:""`
-	HttpServer   struct {
-		Host string `default:"0.0.0.0"`
-		Port int    `default:"8080"`
-		Ssl  struct {
-			Enabled  bool   `default:"false"`
-			CertFile string `default:"cert.pem"`
-			KeyFile  string `default:"key.pem"`
-		}
-		AccessKey string `default:""`
-	}
+	// HttpServer   struct {
+	// 	Host string `default:"0.0.0.0"`
+	// 	Port int    `default:"8080"`
+	// 	Ssl  struct {
+	// 		Enabled  bool   `default:"false"`
+	// 		CertFile string `default:"cert.pem"`
+	// 		KeyFile  string `default:"key.pem"`
+	// 	}
+	// 	AccessKey string `default:""`
+	// }
 }
 
 func setDefaultValues(v interface{}, key string) {
@@ -79,4 +79,8 @@ var GlobalConfig = &Config{}
 
 func Init() {
 	GlobalConfig = initConfig()
+}
+
+func InitWithCookie(cookie string) {
+	GlobalConfig.CookieSecret = cookie
 }
