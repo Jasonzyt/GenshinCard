@@ -104,5 +104,6 @@ func QueryPlayerProfile(apiType int, region string, uid string) (*PlayerProfile,
 	if err != nil || deserializedResp.ReturnCode != 0 {
 		return nil, err
 	}
+	deserializedResp.Data.RoleId = uid
 	return &deserializedResp.Data, nil
 }

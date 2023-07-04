@@ -72,6 +72,7 @@ type PlayerProfile struct {
 	Statistics        Statistics                `json:"stats"`
 	WorldExplorations []WorldExplorationProfile `json:"world_explorations"`
 	Homes             []HomeProfile             `json:"homes"`
+	RoleId            string
 }
 
 type PlayerIndexResponse struct {
