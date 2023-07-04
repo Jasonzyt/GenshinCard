@@ -3,16 +3,13 @@ package image
 import (
 	"fmt"
 	"io"
+	"math/rand"
+	"os"
+	"path/filepath"
+	"time"
 
 	"github.com/jasonzyt/genshincard/net"
 )
-
-type SvgConfig struct {
-	Width  int
-	Height int
-	//DisplayStats       []string
-	BackgroundImageUrl string
-}
 
 const SVG_CONTENT_FORMAT = `
 <svg width="360" height="210" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -66,7 +63,7 @@ const SVG_CONTENT_FORMAT = `
 
     </style>
 
-    <image id="background" xlink:href="assets/img/2.png" width="100%" height="100%" preserveAspectRatio="xMaxYMid slice"/>
+    <image id="background" xlink:href="%s" width="100%%" height="100%%" preserveAspectRatio="xMaxYMid slice"/>
     <text x="30px" y="45px" width="300px" fill="white" style="animation-delay: 200ms">
         <tspan font-size="24px">%s
             <tspan font-size="16px" dx="15px">Lv.<tspan font-size="20px" dx="2px">%d</tspan>
@@ -108,7 +105,27 @@ const SVG_CONTENT_FORMAT = `
 </svg>
 `
 
-func GenerateSvg(profile net.PlayerProfile, conf SvgConfig, writer io.Writer) {
+func randomBackground() string {
+	backgroundPath := "./assets/img/"
+	backgroundDirEntry, err := os.ReadDir(backgroundPath)
+	if err != nil {
+		panic(err)
+	}
+	backgrounds := make([]string, 0, len(backgroundDirEntry))
+	for _, file := range backgroundDirEntry {
+		if file.IsDir() {
+			continue
+		}
+		ext := filepath.Ext(file.Name())
+		if ext == ".png" || ext == ".jpg" || ext == ".jpeg" {
+			backgrounds = append(backgrounds, file.Name())
+		}
+	}
+	rand.Seed(time.Now().UnixNano())
+	return backgroundPath + backgrounds[rand.Intn(len(backgrounds))]
+}
+
+func GenerateSvg(profile *net.PlayerProfile, writer io.Writer) {
 	stats := profile.Statistics
 	chestNumber := stats.CommonChestNumber + stats.ExquisiteChestNumber + stats.PreciousChestNumber + stats.LuxuriousChestNumber + stats.MagicChestNumber
 	culusNumbewr := stats.AnemoculusNumber + stats.GeoculusNumber + stats.ElectroculusNumber + stats.DendroculusNumber
@@ -120,6 +137,7 @@ func GenerateSvg(profile net.PlayerProfile, conf SvgConfig, writer io.Writer) {
 	}
 
 	out := fmt.Sprintf(SVG_CONTENT_FORMAT,
+		randomBackground(),
 		profile.Role.NickName, profile.Role.Level, profile.RoleId,
 		stats.ActiveDayNumber,
 		stats.SpiralAbyss,
