@@ -1,0 +1,36 @@
+name: Generate Card
+
+on: 
+    workflow_dispatch:
+    schedule:
+        - cron: '0 0,12 * * *'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Generate Card
+          uses: actions/checkout@v2
+
+        - name: Set up Go
+          uses: actions/setup-go@v3
+          with:
+              go-version: 1.19
+
+        - name: Build
+          run: |
+            cd src
+            go build
+          shell: bash
+        
+        - name: Run
+          run: |
+            src/genshincard -cookie-secret "${{ secrets.COOKIE }}" -user-id $UID
+            git config --global user.name "jasonzyt/genshincard"
+            git config --global user.email "genshin-card[bot]@jasonzyt.github.io"
+            git add out.svg
+            # "echo" returns true so the build succeeds, even if no changed files
+            git commit -m 'Update generated files' || echo
+            git push
+          shell: bash
