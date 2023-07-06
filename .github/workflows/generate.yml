@@ -26,7 +26,7 @@ jobs:
         
         - name: Run
           run: |
-            src/genshincard -cookie-secret "${{ secrets.COOKIE }}" -user-id $UID
+            src/genshincard -cookie-secret "${{ secrets.COOKIE }}" -user-id ${{ vars.UID }}
             git config --global user.name "jasonzyt/genshincard"
             git config --global user.email "genshin-card[bot]@jasonzyt.github.io"
             git add out.svg
