@@ -29,8 +29,8 @@ jobs:
             src/genshincard -cookie-secret "${{ secrets.COOKIE }}" -user-id ${{ vars.UID }}
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
-            git add out.svg
+            git add out.svg || echo
             # "echo" returns true so the build succeeds, even if no changed files
-            git commit -m 'Update generated files' || echo
+            git commit -m 'actions: update generated files' || echo
             git push
           shell: bash
