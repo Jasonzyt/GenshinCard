@@ -17,7 +17,7 @@ const SVG_CONTENT_FORMAT = `
 
         @font-face {
             font-family: 'HYWenHei-85W';
-            src: url('https://github.com/Jasonzyt/genshin-stats/raw/main/assets/font/subset-HYWenHei-HEW.woff2') format('woff2'), url('https://github.com/Jasonzyt/genshin-stats/raw/main/assets/font/subset-HYWenHei-HEW.woff') format('woff');
+            src: url('https://raw.githubusercontent.com/Jasonzyt/genshin-stats/main/assets/font/subset-HYWenHei-HEW.woff2') format('woff2'), url('https://raw.githubusercontent.com/Jasonzyt/genshin-stats/main/assets/font/subset-HYWenHei-HEW.woff') format('woff');
             font-weight: 900;
             font-style: normal;
             font-display: swap;
@@ -122,7 +122,7 @@ func randomBackground() string {
 		}
 	}
 	rand.Seed(time.Now().UnixNano())
-	return "https://github.com/Jasonzyt/genshin-stats/blob/main/assets/img/" + backgrounds[rand.Intn(len(backgrounds))] + "?raw=true"
+	return "https://raw.githubusercontent.com/Jasonzyt/genshin-stats/main/assets/img/" + backgrounds[rand.Intn(len(backgrounds))]
 }
 
 func GenerateSvg(profile *net.PlayerProfile, writer io.Writer) {
