@@ -13,23 +13,24 @@ jobs:
         - name: Generate Card
           uses: actions/checkout@v2
 
-        - name: Set up Go
-          uses: actions/setup-go@v3
+        - name: Set up Python
+          uses: actions/setup-python@v3.1.4
+          
+        - name: Install Chrome
+          uses: logikal-io/install-chrome@v1.0.1
           with:
-              go-version: 1.19
+            # The version to install (exactly as in https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable)
+            version: 114.0.5735.198-1     
 
-        - name: Build
-          run: |
-            cd src
-            go build
-          shell: bash
-        
+        - name: Download Requirements
+          run: pip install -r requirements.txt
+
         - name: Run
           run: |
-            src/genshincard -cookie-secret "${{ secrets.COOKIE }}" -user-id ${{ vars.UID }}
+            python3 generate.py --cookie "${{ secrets.COOKIE }}" --uid ${{ vars.UID }}
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
-            git add out.svg || echo
+            git add out.png || echo
             # "echo" returns true so the build succeeds, even if no changed files
             git commit -m 'actions: update generated files' || echo
             git push
