@@ -13,7 +13,6 @@ The source link of these artworks are listed below.
 [100270284_p0.jpg](./100270284_p0.jpg): https://pixiv.net/artworks/100270284
 [100307641_p0.jpg](./100307641_p0.jpg): https://pixiv.net/artworks/100307641
 [101036223_p0.jpg](./101036223_p0.jpg): https://pixiv.net/artworks/101036223
-[101595682_p0.jpg](./101595682_p0.jpg): https://pixiv.net/artworks/101595682
 [85274248_p0.jpg](./85274248_p0.jpg): https://pixiv.net/artworks/85274248
 [90681758_p0.jpg](./90681758_p0.jpg): https://pixiv.net/artworks/90681758
 [90772943_p0.jpg](./90772943_p0.jpg): https://pixiv.net/artworks/90772943
