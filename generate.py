@@ -265,7 +265,7 @@ def get_player_index(uid, region):
     resp = http_get(url, ds)
     if resp.status_code != 200:
         resp.raise_for_status()
-    print(resp.text)
+    # print(resp.text)
     return resp.json()
 
 
@@ -340,7 +340,7 @@ def generate_image(uid, region):
         waypoints=waypoints,
         comfort_num=comfort_num,
     )
-    print(svg)
+    # print(svg)
     with open("temp.svg", "w") as f:
         f.write(svg)
     render_svg("temp.svg")

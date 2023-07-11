@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
         - name: Generate Card
           uses: actions/checkout@v2
@@ -17,17 +17,15 @@ jobs:
           uses: actions/setup-python@v3.1.4
           
         - name: Install Chrome
-          uses: logikal-io/install-chrome@v1.0.1
-          with:
-            # The version to install (exactly as in https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable)
-            version: 114.0.5735.198-1     
+          uses: browser-actions/setup-chrome@v1
+          run: chrome --version 
 
         - name: Download Requirements
           run: pip install -r requirements.txt
 
         - name: Run
           run: |
-            python3 generate.py --cookie "${{ secrets.COOKIE }}" --uid ${{ vars.UID }}
+            py generate.py --cookie "${{ secrets.COOKIE }}" --uid ${{ vars.UID }}
             git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git config --local user.name "github-actions[bot]"
             git add out.png || echo
