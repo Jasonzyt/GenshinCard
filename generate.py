@@ -136,7 +136,7 @@ def get_random_background():
 def render_svg(fn):
     driver = webdriver.Chrome()
     driver.get(f"file:///{os.getcwd()}/{fn}")
-    driver.set_window_size(750, 570)
+    driver.set_window_size(772, 573)
     time.sleep(2)
     png = driver.get_screenshot_as_png()
     driver.quit()
