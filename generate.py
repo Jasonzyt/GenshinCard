@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import argparse
 import hashlib
 import math
@@ -341,7 +342,7 @@ def generate_image(uid, region):
         comfort_num=comfort_num,
     )
     # print(svg)
-    with open("temp.svg", "w") as f:
+    with open("temp.svg", "w", encoding="utf-8") as f:
         f.write(svg)
     render_svg("temp.svg")
     os.remove("temp.svg")
