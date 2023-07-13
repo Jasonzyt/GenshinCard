@@ -1,7 +1,7 @@
 # genshin-stats
 Show your Genshin Impact game profile!
 
-> ⚠️ HoYoLAB is not tested because I don't have an OS Server account
+> ⚠️ HoYoLAB is not tested because I don't have an OS Server account  
 > [Submit an issue](https://github.com/Jasonzyt/genshin-stats/issues/new) if you encounter any problems
 
 ## Usage
