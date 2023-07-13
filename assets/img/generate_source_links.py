@@ -11,12 +11,12 @@ for file in files:
     if ext == ".png" or ext == ".jpg":
         parts = stem.split("_p")
         if len(parts) == 2:  # is pixiv
-            out += f"[{name}](./{name}): https://pixiv.net/artworks/{parts[0]}"
+            out += f"[{name}](./{name}) | https://pixiv.net/artworks/{parts[0]}"
             if parts[1] != "0":
                 out += f"#{parts[1]}"
             out += "\n"
         else:
             url = stem.replace("-", "/")
-            out += f"[{name}](./{name}): https://{url}\n"
+            out += f"[{name}](./{name}) | https://{url}\n"
 
 print(out)
