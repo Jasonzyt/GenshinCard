@@ -23,7 +23,8 @@ Thanks to the authors of the Genshin fanworks for their beautiful drawings!
 [See More](https://github.com/Jasonzyt/genshin-stats/blob/main/assets/img/README.md)
 
 ### Third-party Libraries
-
-[requests](https://github.com/psf/requests): Apache-2.0
-[selenium](https://www.selenium.dev): Apache-2.0
-[pillow](https://python-pillow.org): [HPND](https://github.com/python-pillow/Pillow/blob/main/LICENSE)
+Library                                     | License
+--------------------------------------------|--------------------------------------------------------------------
+[requests](https://github.com/psf/requests) | Apache-2.0  
+[selenium](https://www.selenium.dev)        | Apache-2.0  
+[pillow](https://python-pillow.org)         | [HPND](https://github.com/python-pillow/Pillow/blob/main/LICENSE)
