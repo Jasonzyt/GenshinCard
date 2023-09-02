@@ -10,14 +10,14 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-        - name: Generate Card
-          uses: actions/checkout@v2
+        - name: Checkout
+          uses: actions/checkout@v3
 
         - name: Set up Python
           uses: actions/setup-python@v3.1.4
           
-        - name: Install Chrome
-          uses: browser-actions/setup-chrome@v1
+        - name: Install Edge
+          uses: browser-actions/edge-chrome@v1
 
         - name: Download Requirements
           run: pip install -r requirements.txt
