@@ -9,6 +9,7 @@ import time
 import requests
 
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from PIL import Image, ImageDraw
 
 MIYOUSHE_API = 0
@@ -21,7 +22,6 @@ REGION_OS_NA = "os_usa"
 REGION_OS_EU = "os_euro"
 REGION_OS_AS = "os_asia"
 REGION_OS_SAR = "os_cht"
-
 
 APIS = [
     {
@@ -36,60 +36,8 @@ APIS = [
     },
 ]
 
-SVG_TEMPLATE = """
-<svg width="720" height="420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <style>
-        @font-face {{
-            font-family: 'HYWenHei-85W';
-            src: url('./assets/font/subset-HYWenHei-HEW.woff2') format('woff2'), url('./assets/font/subset-HYWenHei-HEW.woff') format('woff');
-            font-weight: 900;
-            font-style: normal;
-            font-display: swap;
-        }}
-        @keyframes fadein {{
-            to {{
-                opacity: 1;
-            }}
-        }}
-        svg {{
-            background: rgba(0, 0, 0, 0);
-            box-shadow: 10px 16px 8px 0 #bbb;
-            border-radius: 40px;
-        }}
-        * {{
-            font-family: 'HYWenHei-85W', sans-serif;
-            font-weight: 900;
-        }}
-        th {{
-            font-size: 30px;
-        }}
-        td {{
-            font-size: 48px;
-        }}
-        tr, td, th {{
-            padding: 0;
-        }}
-    </style>
-    <image id="background" xlink:href="{background}" width="100%" height="100%" preserveAspectRatio="xMaxYMid slice"/>
-    <text x="60px" y="90px" width="600px" fill="white">
-        <tspan font-size="48px">{name}
-            <tspan font-size="32px" dx="30px">Lv.<tspan font-size="40px" dx="4px">{level}</tspan>
-            </tspan>
-        </tspan>
-    </text>
-    <text x="60px" y="136px" width="600px" fill="white">
-        <tspan font-size="32px">UID: {uid}</tspan>
-    </text>
-    <foreignObject x="40px" y="152px" width="640px" height="200px">
-        <table xmlns="http://www.w3.org/1999/xhtml" style="width: 640px; color: white; line-height: 3em; text-align: center;">
-            <tr><th>活跃天数</th><th>深境螺旋</th><th>获得角色</th><th>达成成就</th></tr>
-            <tr><td>{active_days}</td><td>{spiral_abyss}</td><td>{characters}</td><td>{achievements}</td></tr>
-            <tr><th>开启宝箱</th><th>供奉神瞳</th><th>激活锚点</th><th>洞天仙力</th></tr>
-            <tr><td>{chests}</td><td>{culus}</td><td>{waypoints}</td><td>{comfort_num}</td></tr>
-        </table>
-    </foreignObject>
-</svg>
-"""
+with open("template.html", "r", encoding="utf-8") as f:
+    HTML_TEMPLATE = f.read()
 
 global_config = {"cookie": ""}
 
@@ -133,16 +81,17 @@ def get_random_background():
     return "assets/img/" + random.choice(backgrounds)
 
 
-def render_svg(fn):
+def render_html(fn):
     driver = webdriver.ChromiumEdge()
     driver.get(f"file:///{os.getcwd()}/{fn}")
-    driver.set_window_size(772, 574)
+    driver.set_window_size(1000, 1000)
     time.sleep(2)
-    png = driver.get_screenshot_as_png()
+    driver.find_element(By.ID, "card").screenshot(fn.replace(".html", ".png"))
+    # png = driver.get_screenshot_as_png()
     driver.quit()
-    with open(fn.replace(".svg", ".png"), "wb") as f:
-        f.write(png)
-    process_png(fn.replace(".svg", ".png"))
+    # with open(fn.replace(".html", ".png"), "wb") as f:
+    #     f.write(png)
+    process_png(fn.replace(".html", ".png"))
 
 
 def is_in_square(x, y, sx, sy, l):
@@ -170,7 +119,7 @@ def is_in_circle(x, y, cx, cy, radius):
     (cx, cy) is the center of the circle
     radius is the radius of the circle
     """
-    return (x - cx) ** 2 + (y - cy) ** 2 < radius**2
+    return (x - cx) ** 2 + (y - cy) ** 2 < radius ** 2
 
 
 def is_in_rounded_rect(x, y):
@@ -245,7 +194,8 @@ def generate_ds(uid, region):
 def http_get(url, ds):
     headers = {
         "Referer": "https://webstatic.mihoyo.com/",
-        "User-Agent": "Mozilla/5.0 (Linux; Android 13; M2101K9C Build/TKQ1.220829.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/108.0.5359.128 Mobile Safari/537.36 miHoYoBBS/2.44.1",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 13; M2101K9C Build/TKQ1.220829.002; wv) AppleWebKit/537.36 (KHTML, "
+                      "like Gecko) Version/4.0 Chrome/108.0.5359.128 Mobile Safari/537.36 miHoYoBBS/2.44.1",
         "X-Requested-With": "com.mihoyo.hyperion",
         "DS": ds,
         "Origin": "https://api-takumi-record.mihoyo.com",
@@ -292,42 +242,42 @@ def generate_image(uid, region):
     level = role_data["level"]
     """
     ActiveDayNumber      int    `json:"active_day_number"`
-	AchievementNumber    int    `json:"achievement_number"`
-	AnemoculusNumber     int    `json:"anemoculus_number"`
-	GeoculusNumber       int    `json:"geoculus_number"`
-	AvatarNumber         int    `json:"avatar_number"`
-	WayPointNumber       int    `json:"way_point_number"`
-	DomainNumber         int    `json:"domain_number"`
-	SpiralAbyss          string `json:"spiral_abyss"`
-	PreciousChestNumber  int    `json:"precious_chest_number"`
-	LuxuriousChestNumber int    `json:"luxurious_chest_number"`
-	ExquisiteChestNumber int    `json:"exquisite_chest_number"`
-	CommonChestNumber    int    `json:"common_chest_number"`
-	ElectroculusNumber   int    `json:"electroculus_number"`
-	MagicChestNumber     int    `json:"magic_chest_number"`
-	DendroculusNumber    int    `json:"dendroculus_number"`
+    AchievementNumber    int    `json:"achievement_number"`
+    AnemoculusNumber     int    `json:"anemoculus_number"`
+    GeoculusNumber       int    `json:"geoculus_number"`
+    AvatarNumber         int    `json:"avatar_number"`
+    WayPointNumber       int    `json:"way_point_number"`
+    DomainNumber         int    `json:"domain_number"`
+    SpiralAbyss          string `json:"spiral_abyss"`
+    PreciousChestNumber  int    `json:"precious_chest_number"`
+    LuxuriousChestNumber int    `json:"luxurious_chest_number"`
+    ExquisiteChestNumber int    `json:"exquisite_chest_number"`
+    CommonChestNumber    int    `json:"common_chest_number"`
+    ElectroculusNumber   int    `json:"electroculus_number"`
+    MagicChestNumber     int    `json:"magic_chest_number"`
+    DendroculusNumber    int    `json:"dendroculus_number"`
     """
     active_days = stats_data["active_day_number"]
     spiral_abyss = stats_data["spiral_abyss"]
     achievements = stats_data["achievement_number"]
     characters = stats_data["avatar_number"]
     chests = (
-        stats_data["precious_chest_number"]
-        + stats_data["luxurious_chest_number"]
-        + stats_data["exquisite_chest_number"]
-        + stats_data["common_chest_number"]
+            stats_data["precious_chest_number"]
+            + stats_data["luxurious_chest_number"]
+            + stats_data["exquisite_chest_number"]
+            + stats_data["common_chest_number"]
     )
     culus = (
-        stats_data["anemoculus_number"]
-        + stats_data["geoculus_number"]
-        + stats_data["electroculus_number"]
-        + stats_data["dendroculus_number"]
+            stats_data["anemoculus_number"]
+            + stats_data["geoculus_number"]
+            + stats_data["electroculus_number"]
+            + stats_data["dendroculus_number"]
     )
     waypoints = stats_data["way_point_number"]
     comfort_num = 0
     for home in home_list:
         comfort_num = max(comfort_num, home["comfort_num"])
-    svg = SVG_TEMPLATE.format(
+    html = HTML_TEMPLATE.format(
         background=get_random_background(),
         name=name,
         level=level,
@@ -341,11 +291,11 @@ def generate_image(uid, region):
         waypoints=waypoints,
         comfort_num=comfort_num,
     )
-    # print(svg)
-    with open("temp.svg", "w", encoding="utf-8") as f:
-        f.write(svg)
-    render_svg("temp.svg")
-    os.remove("temp.svg")
+    # print(html)
+    with open("temp.html", "w", encoding="utf-8") as f:
+        f.write(html)
+    render_html("temp.html")
+    os.remove("temp.html")
 
 
 if __name__ == "__main__":

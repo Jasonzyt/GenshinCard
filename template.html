@@ -1,0 +1,61 @@
+<html lang="zh-CN">
+<style>
+    #card {{
+        width: 740px;
+        height: 440px;
+    }}
+
+    svg {{
+        box-shadow: 10px 16px 8px 0 #bbb;
+        border-radius: 40px;
+    }}
+</style>
+<div id="card">
+    <svg width="720" height="420" xmlns="http://www.w3.org/2000/html" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <style>
+            @font-face {{
+                font-family: 'HYWenHei-85W';
+                src: url('./assets/font/subset-HYWenHei-HEW.woff2') format('woff2'), url('./assets/font/subset-HYWenHei-HEW.woff') format('woff');
+                font-weight: 900;
+                font-style: normal;
+                font-display: swap;
+            }}
+
+            * {{
+                font-family: 'HYWenHei-85W', sans-serif;
+                font-weight: 900;
+            }}
+
+            th {{
+                font-size: 30px;
+            }}
+
+            td {{
+                font-size: 48px;
+            }}
+
+            tr, td, th {{
+                padding: 0;
+            }}
+        </style>
+        <image id="background" xlink:href="{background}" width="100%" height="100%" preserveAspectRatio="xMaxYMid slice"/>
+        <text x="60px" y="90px" width="600px" fill="white">
+            <tspan font-size="48px">{name}
+                <tspan font-size="32px" dx="30px">Lv.<tspan font-size="40px" dx="4px">{level}</tspan>
+                </tspan>
+            </tspan>
+        </text>
+        <text x="60px" y="136px" width="600px" fill="white">
+            <tspan font-size="32px">UID: {uid}</tspan>
+        </text>
+        <foreignObject x="40px" y="152px" width="640px" height="200px">
+            <table xmlns="http://www.w3.org/1999/xhtml" style="width: 640px; color: white; line-height: 3em; text-align: center;">
+                <tr><th>活跃天数</th><th>深境螺旋</th><th>获得角色</th><th>达成成就</th></tr>
+                <tr><td>{active_days}</td><td>{spiral_abyss}</td><td>{characters}</td><td>{achievements}</td></tr>
+                <tr><th>开启宝箱</th><th>供奉神瞳</th><th>激活锚点</th><th>洞天仙力</th></tr>
+                <tr><td>{chests}</td><td>{culus}</td><td>{waypoints}</td><td>{comfort_num}</td></tr>
+            </table>
+        </foreignObject>
+    </svg>
+</div>
+</html>
