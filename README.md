@@ -1,4 +1,6 @@
 # genshin-stats
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJasonzyt%2Fgenshin-stats.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FJasonzyt%2Fgenshin-stats?ref=badge_shield)
+
 Show your Genshin Impact game profile!
 
 > ⚠️ HoYoLAB is not tested because I don't have an OS Server account  
@@ -28,3 +30,7 @@ Library                                     | License
 [requests](https://github.com/psf/requests) | Apache-2.0  
 [selenium](https://www.selenium.dev)        | Apache-2.0  
 [pillow](https://python-pillow.org)         | [HPND](https://github.com/python-pillow/Pillow/blob/main/LICENSE)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJasonzyt%2Fgenshin-stats.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FJasonzyt%2Fgenshin-stats?ref=badge_large)
